@@ -1,0 +1,217 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { getAdminSession, clearAdminSession, getAllVotesByCategory, resetAllVotes } from "@/lib/storage";
+import { distritos } from "@/data/mockData";
+import { toast } from "sonner";
+import { Crown, LogOut, Users, Trash2, BarChart3 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+const PanelSuperAdmin = () => {
+  const navigate = useNavigate();
+  const [adminData, setAdminData] = useState<any>(null);
+  const [totalStats, setTotalStats] = useState({ total: 0, presidente: 0, mesa: 0, alcalde: 0 });
+
+  useEffect(() => {
+    const session = getAdminSession();
+    if (!session || session.rol !== 'superadmin') {
+      toast.error("Acceso no autorizado");
+      navigate("/admin/login");
+      return;
+    }
+
+    setAdminData(session);
+    calculateTotalStats();
+  }, [navigate]);
+
+  const calculateTotalStats = () => {
+    const vPresidente = getAllVotesByCategory('presidente');
+    const vMesa = getAllVotesByCategory('mesa');
+    const vAlcalde = getAllVotesByCategory('alcalde');
+
+    setTotalStats({
+      total: vPresidente.length + vMesa.length + vAlcalde.length,
+      presidente: vPresidente.length,
+      mesa: vMesa.length,
+      alcalde: vAlcalde.length
+    });
+  };
+
+  const getStatsByDistrito = (distrito: string) => {
+    const vPresidente = getAllVotesByCategory('presidente').filter(v => v.distrito === distrito);
+    const vMesa = getAllVotesByCategory('mesa').filter(v => v.distrito === distrito);
+    const vAlcalde = getAllVotesByCategory('alcalde').filter(v => v.distrito === distrito);
+
+    return {
+      total: vPresidente.length + vMesa.length + vAlcalde.length,
+      presidente: vPresidente.length,
+      mesa: vMesa.length,
+      alcalde: vAlcalde.length
+    };
+  };
+
+  const handleLogout = () => {
+    clearAdminSession();
+    toast.success("Sesión cerrada");
+    navigate("/");
+  };
+
+  const handleResetVotes = () => {
+    resetAllVotes();
+    toast.success("Todos los votos han sido eliminados");
+    calculateTotalStats();
+  };
+
+  if (!adminData) return null;
+
+  return (
+    <div className="min-h-screen gradient-admin p-4">
+      <div className="container mx-auto py-8 max-w-7xl">
+        {/* Header */}
+        <Card className="p-6 mb-8 bg-destructive/90 border-none shadow-admin">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h1 className="text-3xl font-heading font-bold text-white flex items-center gap-2">
+                <Crown className="w-8 h-8" />
+                Panel Super Administrador
+              </h1>
+              <p className="text-white/90">
+                {adminData.nombre} • Vista Nacional Completa
+              </p>
+            </div>
+            <div className="flex gap-2">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" className="border-white text-white hover:bg-white hover:text-destructive">
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Reset Votos
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Esta acción eliminará todos los votos registrados en el sistema. Esta acción no se puede deshacer.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleResetVotes} className="bg-destructive">
+                      Confirmar Reset
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              
+              <Button onClick={handleLogout} variant="outline" className="border-white text-white hover:bg-white hover:text-destructive">
+                <LogOut className="mr-2 h-4 w-4" />
+                Cerrar Sesión
+              </Button>
+            </div>
+          </div>
+        </Card>
+
+        {/* National Stats */}
+        <div className="grid md:grid-cols-4 gap-6 mb-8">
+          <Card className="p-6 bg-white shadow-card">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-lg gradient-hero">
+                <Users className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Total Nacional</p>
+                <p className="text-3xl font-bold">{totalStats.total}</p>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 bg-white shadow-card">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-lg gradient-presidente">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Presidente</p>
+                <p className="text-3xl font-bold text-presidente">{totalStats.presidente}</p>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 bg-white shadow-card">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-lg gradient-mesa">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Mesa Redonda</p>
+                <p className="text-3xl font-bold text-mesa">{totalStats.mesa}</p>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 bg-white shadow-card">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-lg gradient-alcalde">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Alcalde</p>
+                <p className="text-3xl font-bold text-alcalde">{totalStats.alcalde}</p>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* District Stats */}
+        <Card className="p-6 bg-white shadow-card">
+          <h2 className="text-2xl font-heading font-bold mb-6">Estadísticas por Distrito</h2>
+          <div className="space-y-4">
+            {distritos.map(distrito => {
+              const stats = getStatsByDistrito(distrito);
+              return (
+                <Card key={distrito} className="p-4 bg-secondary/50">
+                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                      <h3 className="text-lg font-heading font-semibold">{distrito}</h3>
+                    </div>
+                    <div className="flex gap-6 text-sm">
+                      <div>
+                        <span className="text-muted-foreground">Total: </span>
+                        <span className="font-bold">{stats.total}</span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Pres: </span>
+                        <span className="font-bold text-presidente">{stats.presidente}</span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Mesa: </span>
+                        <span className="font-bold text-mesa">{stats.mesa}</span>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground">Alc: </span>
+                        <span className="font-bold text-alcalde">{stats.alcalde}</span>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default PanelSuperAdmin;
