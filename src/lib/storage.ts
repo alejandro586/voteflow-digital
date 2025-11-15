@@ -1,0 +1,87 @@
+// Utility functions for localStorage management
+
+export interface UserData {
+  dni: string;
+  nombre: string;
+  apellidos: string;
+  distrito: string;
+}
+
+export interface VoteData {
+  candidatoId: string;
+  distrito: string;
+  timestamp: string;
+}
+
+// User data management
+export const saveUserData = (data: UserData) => {
+  localStorage.setItem('userData', JSON.stringify(data));
+};
+
+export const getUserData = (): UserData | null => {
+  const data = localStorage.getItem('userData');
+  return data ? JSON.parse(data) : null;
+};
+
+export const clearUserData = () => {
+  localStorage.removeItem('userData');
+};
+
+// Vote tracking
+export const hasVoted = (dni: string, categoria: 'presidente' | 'mesa' | 'alcalde'): boolean => {
+  return localStorage.getItem(`${categoria}_voted_${dni}`) !== null;
+};
+
+export const markAsVoted = (dni: string, categoria: 'presidente' | 'mesa' | 'alcalde', voteData: VoteData) => {
+  localStorage.setItem(`${categoria}_voted_${dni}`, JSON.stringify(voteData));
+};
+
+export const getVote = (dni: string, categoria: 'presidente' | 'mesa' | 'alcalde'): VoteData | null => {
+  const data = localStorage.getItem(`${categoria}_voted_${dni}`);
+  return data ? JSON.parse(data) : null;
+};
+
+export const hasCompletedAllVotes = (dni: string): boolean => {
+  return hasVoted(dni, 'presidente') && hasVoted(dni, 'mesa') && hasVoted(dni, 'alcalde');
+};
+
+// Admin session
+export const saveAdminSession = (email: string, rol: string, distrito: string | null, nombre: string, dni: string) => {
+  localStorage.setItem('adminSession', JSON.stringify({ email, rol, distrito, nombre, dni }));
+};
+
+export const getAdminSession = () => {
+  const data = localStorage.getItem('adminSession');
+  return data ? JSON.parse(data) : null;
+};
+
+export const clearAdminSession = () => {
+  localStorage.removeItem('adminSession');
+};
+
+// Get all votes for statistics
+export const getAllVotesByCategory = (categoria: 'presidente' | 'mesa' | 'alcalde'): VoteData[] => {
+  const votes: VoteData[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith(`${categoria}_voted_`)) {
+      const voteData = localStorage.getItem(key);
+      if (voteData) {
+        votes.push(JSON.parse(voteData));
+      }
+    }
+  }
+  return votes;
+};
+
+// Reset all votes (super admin only)
+export const resetAllVotes = () => {
+  const keysToRemove: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && (key.includes('_voted_') || key === 'userData')) {
+      keysToRemove.push(key);
+    }
+  }
+  keysToRemove.forEach(key => localStorage.removeItem(key));
+};
