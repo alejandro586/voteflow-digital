@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { getUserData, hasVoted, hasCompletedAllVotes } from "@/lib/storage";
-import { Vote, CheckCircle2, Lock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { getUserData, hasVoted, hasCompletedAllVotes, getActiveVotingCategory } from "@/lib/storage";
+import { Vote, CheckCircle2, Lock, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 
 const Seleccion = () => {
@@ -36,6 +37,14 @@ const Seleccion = () => {
   const handleCategoryClick = (category: string) => {
     if (!userData) return;
 
+    const activeCategory = getActiveVotingCategory();
+    
+    // Verificar si hay una categoría activa y si es diferente a la seleccionada
+    if (activeCategory && activeCategory !== category) {
+      toast.error(`Solo está habilitada la votación de ${activeCategory} en este momento`);
+      return;
+    }
+
     const dni = userData.dni;
 
     if (category === 'presidente' && !votedPresidente) {
@@ -49,6 +58,8 @@ const Seleccion = () => {
 
   if (!userData) return null;
 
+  const activeCategory = getActiveVotingCategory();
+
   const categories = [
     {
       id: 'presidente',
@@ -57,7 +68,8 @@ const Seleccion = () => {
       color: 'gradient-presidente',
       icon: Vote,
       voted: votedPresidente,
-      locked: false
+      locked: false,
+      isActive: !activeCategory || activeCategory === 'presidente'
     },
     {
       id: 'mesa',
@@ -66,7 +78,8 @@ const Seleccion = () => {
       color: 'gradient-mesa',
       icon: Vote,
       voted: votedMesa,
-      locked: !votedPresidente
+      locked: !votedPresidente,
+      isActive: !activeCategory || activeCategory === 'mesa'
     },
     {
       id: 'alcalde',
@@ -75,7 +88,8 @@ const Seleccion = () => {
       color: 'gradient-alcalde',
       icon: Vote,
       voted: votedAlcalde,
-      locked: !votedPresidente || !votedMesa
+      locked: !votedPresidente || !votedMesa,
+      isActive: !activeCategory || activeCategory === 'alcalde'
     }
   ];
 
