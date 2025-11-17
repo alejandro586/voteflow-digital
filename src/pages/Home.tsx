@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Vote, Shield, TrendingUp } from "lucide-react";
+import { Vote, ExternalLink } from "lucide-react";
 import { hasCompletedAllVotes, getUserData } from "@/lib/storage";
+import elComercioImg from "@/assets/el-comercio-newspaper.jpg";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -69,52 +70,59 @@ const Home = () => {
           </Button>
         </div>
 
-        {/* Features */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-16">
-          <Card className="p-6 bg-white/95 backdrop-blur shadow-card hover:shadow-soft transition-smooth">
-            <Shield className="w-12 h-12 text-primary mb-4" />
-            <h3 className="text-xl font-heading font-semibold mb-2">Seguro</h3>
-            <p className="text-muted-foreground">
-              Sistema protegido con encriptación de última generación
-            </p>
-          </Card>
-
-          <Card className="p-6 bg-white/95 backdrop-blur shadow-card hover:shadow-soft transition-smooth">
-            <Vote className="w-12 h-12 text-primary mb-4" />
-            <h3 className="text-xl font-heading font-semibold mb-2">Simple</h3>
-            <p className="text-muted-foreground">
-              Interfaz intuitiva para una experiencia de votación fluida
-            </p>
-          </Card>
-
-          <Card className="p-6 bg-white/95 backdrop-blur shadow-card hover:shadow-soft transition-smooth">
-            <TrendingUp className="w-12 h-12 text-primary mb-4" />
-            <h3 className="text-xl font-heading font-semibold mb-2">Transparente</h3>
-            <p className="text-muted-foreground">
-              Resultados en tiempo real con total trazabilidad
-            </p>
-          </Card>
-        </div>
-
         {/* News Section */}
         <div className="mt-16 max-w-4xl mx-auto">
-          <Card className="p-8 bg-white/95 backdrop-blur shadow-card">
-            <h2 className="text-2xl font-heading font-bold mb-6 text-center">Noticias Destacadas</h2>
-            <div className="space-y-4">
-              <div className="border-l-4 border-primary pl-4">
-                <p className="font-semibold text-lg">El Comercio</p>
+          <div className="mb-8">
+            <h2 className="text-3xl font-heading font-bold text-white text-center mb-8">
+              Noticias de políticas relacionadas al Perú
+            </h2>
+            
+            {/* El Comercio Card */}
+            <a 
+              href="https://elcomercio.pe/noticias/politica/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block mb-6 group"
+            >
+              <Card className="overflow-hidden bg-white/95 backdrop-blur shadow-card hover:shadow-soft transition-smooth transform hover:scale-[1.02]">
+                <div className="relative">
+                  <img 
+                    src={elComercioImg} 
+                    alt="El Comercio - Noticias de Política"
+                    className="w-full h-64 object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                    <div className="text-white">
+                      <h3 className="text-2xl font-heading font-bold mb-2 flex items-center gap-2">
+                        El Comercio - Política
+                        <ExternalLink className="w-5 h-5" />
+                      </h3>
+                      <p className="text-white/90">
+                        Mantente informado con las últimas noticias políticas del Perú
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </a>
+
+            {/* News Tents */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="p-6 bg-white/95 backdrop-blur shadow-card hover:shadow-soft transition-smooth border-l-4 border-primary">
+                <h3 className="text-xl font-heading font-bold mb-3 text-primary">📰 Últimas Noticias</h3>
                 <p className="text-muted-foreground">
-                  "VotoDigital revoluciona el sistema electoral peruano con tecnología de punta"
+                  Cobertura completa de los acontecimientos políticos más relevantes del Perú
                 </p>
-              </div>
-              <div className="border-l-4 border-accent pl-4">
-                <p className="font-semibold text-lg">Belaúnde Digital</p>
+              </Card>
+
+              <Card className="p-6 bg-white/95 backdrop-blur shadow-card hover:shadow-soft transition-smooth border-l-4 border-accent">
+                <h3 className="text-xl font-heading font-bold mb-3 text-accent">🗳️ Análisis Electoral</h3>
                 <p className="text-muted-foreground">
-                  "Participación récord en las últimas elecciones gracias a plataformas digitales"
+                  Perspectivas y análisis profundo sobre el panorama político nacional
                 </p>
-              </div>
+              </Card>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
     </div>
