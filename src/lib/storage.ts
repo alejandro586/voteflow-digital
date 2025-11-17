@@ -85,3 +85,56 @@ export const resetAllVotes = () => {
   }
   keysToRemove.forEach(key => localStorage.removeItem(key));
 };
+
+// Active voting category control
+export const setActiveVotingCategory = (categoria: 'presidente' | 'mesa' | 'alcalde' | null) => {
+  if (categoria) {
+    localStorage.setItem('activeVotingCategory', categoria);
+  } else {
+    localStorage.removeItem('activeVotingCategory');
+  }
+};
+
+export const getActiveVotingCategory = (): 'presidente' | 'mesa' | 'alcalde' | null => {
+  const category = localStorage.getItem('activeVotingCategory');
+  return category as 'presidente' | 'mesa' | 'alcalde' | null;
+};
+
+// ML Training Data Management
+export interface TrainingData {
+  id: string;
+  distrito: string;
+  categoria: string;
+  votos: number;
+  timestamp: string;
+  processed: boolean;
+}
+
+export const saveTrainingData = (data: TrainingData) => {
+  const existing = getTrainingData();
+  const updated = [...existing, data];
+  localStorage.setItem('mlTrainingData', JSON.stringify(updated));
+};
+
+export const getTrainingData = (): TrainingData[] => {
+  const data = localStorage.getItem('mlTrainingData');
+  return data ? JSON.parse(data) : [];
+};
+
+export const deleteTrainingData = (id: string) => {
+  const existing = getTrainingData();
+  const filtered = existing.filter(item => item.id !== id);
+  localStorage.setItem('mlTrainingData', JSON.stringify(filtered));
+};
+
+export const clearAllTrainingData = () => {
+  localStorage.removeItem('mlTrainingData');
+};
+
+export const markTrainingDataProcessed = (id: string) => {
+  const existing = getTrainingData();
+  const updated = existing.map(item => 
+    item.id === id ? { ...item, processed: true } : item
+  );
+  localStorage.setItem('mlTrainingData', JSON.stringify(updated));
+};
