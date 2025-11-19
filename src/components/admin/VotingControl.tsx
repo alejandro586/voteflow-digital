@@ -35,46 +35,52 @@ const VotingControl = () => {
   ];
 
   return (
-    <Card className="p-6 bg-card shadow-card border-admin-primary/20">
-      <h2 className="text-2xl font-heading font-bold mb-6 text-foreground">Control de Votaciones</h2>
+    <Card className="p-8 bg-card shadow-card border-admin-primary/20 backdrop-blur-sm animate-fade-in">
+      <div className="flex items-center gap-3 mb-8">
+        <div className="p-3 rounded-xl bg-admin-primary/10">
+          <Power className="w-7 h-7 text-admin-primary" />
+        </div>
+        <h2 className="text-3xl font-heading font-bold text-foreground">Control de Votaciones</h2>
+      </div>
       
-      <div className="grid md:grid-cols-3 gap-4">
-        {categories.map((category) => {
+      <div className="grid md:grid-cols-3 gap-6">
+        {categories.map((category, idx) => {
           const isActive = activeCategory === category.id;
           const isDisabled = activeCategory !== null && activeCategory !== category.id;
           
           return (
             <Card
               key={category.id}
-              className={`p-6 transition-all ${
+              className={`p-8 transition-all animate-fade-in hover:scale-105 ${
                 isActive 
-                  ? 'border-2 border-admin-primary shadow-soft' 
+                  ? 'border-2 border-admin-primary shadow-soft bg-admin-primary/5' 
                   : isDisabled 
                   ? 'opacity-50' 
-                  : ''
+                  : 'border-2 border-border'
               }`}
+              style={{ animationDelay: `${idx * 0.1}s` }}
             >
-              <div className="flex flex-col items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-semibold text-foreground">{category.name}</h3>
+              <div className="flex flex-col items-center gap-6">
+                <div className="flex flex-col items-center gap-3">
+                  <h3 className="text-xl font-semibold text-foreground text-center">{category.name}</h3>
                   {isActive && (
-                    <Badge className="bg-admin-primary text-white">Activa</Badge>
+                    <Badge className="bg-admin-primary text-white shadow-soft px-4 py-1 text-sm">Activa</Badge>
                   )}
                 </div>
                 
                 <Button
                   onClick={() => handleToggle(category.id)}
                   variant={isActive ? "default" : "outline"}
-                  className={`w-full ${isActive ? 'gradient-admin' : 'border-admin-primary/30'}`}
+                  className={`w-full h-12 text-base font-semibold hover:scale-105 transition-smooth ${isActive ? 'gradient-admin shadow-soft' : 'border-2 border-admin-primary/30'}`}
                 >
                   {isActive ? (
                     <>
-                      <PowerOff className="w-4 h-4 mr-2" />
+                      <PowerOff className="w-5 h-5 mr-2" />
                       Desactivar
                     </>
                   ) : (
                     <>
-                      <Power className="w-4 h-4 mr-2" />
+                      <Power className="w-5 h-5 mr-2" />
                       Activar
                     </>
                   )}
@@ -85,11 +91,11 @@ const VotingControl = () => {
         })}
       </div>
 
-      <div className="mt-6 p-4 bg-muted/50 rounded-lg border border-admin-primary/10">
-        <p className="text-sm text-muted-foreground">
-          <strong className="text-foreground">Nota:</strong> Solo una categoría puede estar activa a la vez. 
+      <div className="mt-8 p-6 bg-gradient-to-br from-admin-primary/5 to-admin-secondary/5 rounded-xl border-2 border-admin-primary/10">
+        <p className="text-base text-muted-foreground leading-relaxed">
+          <strong className="text-foreground font-bold">Nota:</strong> Solo una categoría puede estar activa a la vez. 
           Al activar una categoría, las anteriores se desactivan automáticamente para mantener el orden: 
-          Presidente → Mesa Redonda → Alcalde.
+          <span className="font-semibold text-foreground"> Presidente → Mesa Redonda → Alcalde</span>.
         </p>
       </div>
     </Card>

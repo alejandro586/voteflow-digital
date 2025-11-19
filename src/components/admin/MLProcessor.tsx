@@ -99,12 +99,16 @@ const MLProcessor = ({ distrito }: MLProcessorProps) => {
   const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))'];
 
   return (
-    <Card className="p-6 bg-card shadow-card border-admin-primary/20">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-heading font-bold flex items-center gap-2">
-          <Database className="w-6 h-6 text-admin-primary" />
-          Procesador ML
-        </h2>
+    <Card className="p-8 bg-card shadow-card border-admin-primary/20 backdrop-blur-sm animate-fade-in">
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3">
+          <div className="p-3 rounded-xl bg-admin-primary/10">
+            <Database className="w-7 h-7 text-admin-primary" />
+          </div>
+          <h2 className="text-3xl font-heading font-bold">
+            Procesador ML
+          </h2>
+        </div>
         <div className="flex gap-2">
           <Button
             variant="outline"
