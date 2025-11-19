@@ -8,6 +8,7 @@ import { getUserData, markAsVoted, hasVoted } from "@/lib/storage";
 import { alcaldesPorDistrito } from "@/data/mockData";
 import { toast } from "sonner";
 import { ArrowLeft, Vote } from "lucide-react";
+import alcaldesHero from "@/assets/alcaldes-hero.jpg";
 
 const Alcaldes = () => {
   const navigate = useNavigate();
@@ -58,7 +59,17 @@ const Alcaldes = () => {
   if (!userData) return null;
 
   return (
-    <div className="min-h-screen gradient-alcalde relative overflow-hidden p-4">
+    <div className="min-h-screen gradient-alcalde relative overflow-hidden p-4 animate-page-enter">
+      {/* Hero Image Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-alcalde/50 to-alcalde" />
+        <img 
+          src={alcaldesHero} 
+          alt="Municipalidad" 
+          className="w-full h-96 object-cover opacity-30"
+        />
+      </div>
+      
       {/* Decorative Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-80 h-80 bg-white/10 rounded-full blur-3xl" />

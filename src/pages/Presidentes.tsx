@@ -8,6 +8,7 @@ import { getUserData, markAsVoted, hasVoted } from "@/lib/storage";
 import { candidatosPresidente } from "@/data/mockData";
 import { toast } from "sonner";
 import { ArrowLeft, Vote } from "lucide-react";
+import presidentesHero from "@/assets/presidentes-hero.jpg";
 
 const Presidentes = () => {
   const navigate = useNavigate();
@@ -49,7 +50,17 @@ const Presidentes = () => {
   if (!userData) return null;
 
   return (
-    <div className="min-h-screen gradient-presidente relative overflow-hidden p-4">
+    <div className="min-h-screen gradient-presidente relative overflow-hidden p-4 animate-page-enter">
+      {/* Hero Image Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-presidente/50 to-presidente" />
+        <img 
+          src={presidentesHero} 
+          alt="Palacio de Gobierno" 
+          className="w-full h-96 object-cover opacity-30"
+        />
+      </div>
+      
       {/* Decorative Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-80 h-80 bg-white/10 rounded-full blur-3xl" />

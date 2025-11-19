@@ -61,11 +61,11 @@ const DNIValidation = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center gradient-hero relative overflow-hidden p-4">
+    <div className="min-h-screen flex items-center justify-center gradient-hero relative overflow-hidden p-4 animate-page-enter">
       {/* Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 right-10 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
+        <div className="absolute top-10 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-10 right-10 w-80 h-80 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
       <Card className="max-w-md w-full p-10 shadow-card animate-fade-in backdrop-blur-xl bg-white/95 border-2 border-white/20 relative z-10">

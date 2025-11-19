@@ -8,6 +8,7 @@ import { getUserData, markAsVoted, hasVoted } from "@/lib/storage";
 import { partidosMesa } from "@/data/mockData";
 import { toast } from "sonner";
 import { ArrowLeft, Vote } from "lucide-react";
+import mesaRedondaHero from "@/assets/mesa-redonda-hero.jpg";
 
 const MesaRedonda = () => {
   const navigate = useNavigate();
@@ -55,7 +56,17 @@ const MesaRedonda = () => {
   if (!userData) return null;
 
   return (
-    <div className="min-h-screen gradient-mesa relative overflow-hidden p-4">
+    <div className="min-h-screen gradient-mesa relative overflow-hidden p-4 animate-page-enter">
+      {/* Hero Image Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-mesa/50 to-mesa" />
+        <img 
+          src={mesaRedondaHero} 
+          alt="Mesa Redonda Política" 
+          className="w-full h-96 object-cover opacity-30"
+        />
+      </div>
+      
       {/* Decorative Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-80 h-80 bg-white/10 rounded-full blur-3xl" />

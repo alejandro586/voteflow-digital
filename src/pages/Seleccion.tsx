@@ -94,11 +94,11 @@ const Seleccion = () => {
   ];
 
   return (
-    <div className="min-h-screen gradient-hero relative overflow-hidden p-4">
+    <div className="min-h-screen gradient-hero relative overflow-hidden p-4 animate-page-enter">
       {/* Decorative Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-white/5 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
       </div>
 
       <div className="container mx-auto py-8 max-w-6xl relative z-10">
