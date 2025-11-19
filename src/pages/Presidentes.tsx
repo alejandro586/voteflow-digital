@@ -49,60 +49,67 @@ const Presidentes = () => {
   if (!userData) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20 p-4">
-      <div className="container mx-auto py-8 max-w-5xl">
+    <div className="min-h-screen gradient-presidente relative overflow-hidden p-4">
+      {/* Decorative Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-10 left-10 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="container mx-auto py-8 max-w-5xl relative z-10">
         {/* Header */}
-        <Card className="p-6 mb-8 shadow-card gradient-presidente">
+        <Card className="p-8 mb-10 shadow-card gradient-presidente border-2 border-white/20 backdrop-blur-xl animate-fade-in">
           <div className="flex items-center justify-between text-white">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate("/seleccion")}
-                className="text-white hover:bg-white/20"
+                className="text-white hover:bg-white/20 h-12 w-12 rounded-xl transition-smooth hover:scale-110"
               >
-                <ArrowLeft className="h-5 w-5" />
+                <ArrowLeft className="h-6 w-6" />
               </Button>
               <div>
-                <h1 className="text-2xl font-heading font-bold">
+                <h1 className="text-3xl font-heading font-bold mb-2">
                   Elección de Presidente
                 </h1>
-                <p className="text-white/90">
+                <p className="text-white/95 text-lg">
                   Selecciona tu candidato preferido
                 </p>
               </div>
             </div>
-            <Vote className="w-10 h-10" />
+            <Vote className="w-12 h-12" />
           </div>
         </Card>
 
         {/* Candidates */}
         <RadioGroup value={selectedCandidate} onValueChange={setSelectedCandidate}>
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {candidatosPresidente.map((candidato) => (
+          <div className="grid md:grid-cols-2 gap-8 mb-10">
+            {candidatosPresidente.map((candidato, idx) => (
               <Card
                 key={candidato.id}
-                className={`p-6 cursor-pointer transition-all hover:shadow-card ${
-                  selectedCandidate === candidato.id ? 'border-2 border-presidente shadow-card' : ''
+                className={`p-8 cursor-pointer transition-all hover:shadow-card backdrop-blur-xl bg-white/95 border-2 animate-fade-in hover:scale-105 ${
+                  selectedCandidate === candidato.id ? 'border-2 border-presidente shadow-soft' : 'border-white/20'
                 }`}
                 onClick={() => setSelectedCandidate(candidato.id)}
+                style={{ animationDelay: `${idx * 0.1}s` }}
               >
-                <div className="flex items-start gap-4">
-                  <RadioGroupItem value={candidato.id} id={candidato.id} className="mt-1" />
+                <div className="flex items-start gap-6">
+                  <RadioGroupItem value={candidato.id} id={candidato.id} className="mt-2 w-5 h-5" />
                   <Label htmlFor={candidato.id} className="flex-1 cursor-pointer">
-                    <div className="flex gap-4">
-                      <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                    <div className="flex gap-6">
+                      <div className="w-24 h-24 rounded-2xl bg-muted flex items-center justify-center flex-shrink-0 overflow-hidden shadow-soft hover:scale-110 transition-smooth">
                         <img 
                           src={candidato.foto} 
                           alt={candidato.nombre}
-                          className="w-full h-full rounded-full object-cover"
+                          className="w-full h-full object-cover"
                         />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-lg font-heading font-bold mb-1">
+                        <h3 className="text-xl font-heading font-bold mb-2">
                           {candidato.nombre}
                         </h3>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-base text-muted-foreground">
                           {candidato.partido}
                         </p>
                       </div>
@@ -115,10 +122,10 @@ const Presidentes = () => {
         </RadioGroup>
 
         {/* Vote Button */}
-        <Card className="p-6 shadow-card">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <Card className="p-8 shadow-card backdrop-blur-xl bg-white/95 border-2 border-white/20 animate-fade-in">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
-              <p className="font-semibold">
+              <p className="font-semibold text-lg">
                 {selectedCandidate 
                   ? `Has seleccionado: ${candidatosPresidente.find(c => c.id === selectedCandidate)?.nombre}`
                   : 'Selecciona un candidato para continuar'
@@ -128,7 +135,7 @@ const Presidentes = () => {
             <Button
               onClick={handleVote}
               disabled={!selectedCandidate}
-              className="gradient-presidente shadow-soft w-full sm:w-auto"
+              className="gradient-presidente shadow-soft w-full sm:w-auto h-14 px-8 text-lg font-semibold hover:scale-105 transition-smooth"
               size="lg"
             >
               Confirmar Voto

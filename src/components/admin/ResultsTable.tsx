@@ -48,26 +48,31 @@ const ResultsTable = ({ distrito }: ResultsTableProps) => {
                      alcaldeResults.reduce((acc, r) => acc + r.count, 0);
 
   return (
-    <Card className="p-6 bg-card shadow-card border-admin-primary/20">
-      <div className="flex items-center gap-2 mb-6">
-        <BarChart3 className="w-6 h-6 text-admin-primary" />
-        <h2 className="text-2xl font-heading font-bold text-foreground">
+    <Card className="p-8 bg-card shadow-card border-admin-primary/20 backdrop-blur-sm animate-fade-in">
+      <div className="flex items-center gap-3 mb-8">
+        <div className="p-3 rounded-xl bg-admin-primary/10">
+          <BarChart3 className="w-7 h-7 text-admin-primary" />
+        </div>
+        <h2 className="text-3xl font-heading font-bold text-foreground">
           Tabla de Resultados {distrito && `- ${distrito}`}
         </h2>
       </div>
 
-      <div className="mb-6 p-4 bg-admin-primary/10 rounded-lg border border-admin-primary/20">
+      <div className="mb-8 p-6 bg-gradient-to-br from-admin-primary/10 to-admin-secondary/10 rounded-2xl border-2 border-admin-primary/20 shadow-soft">
         <div className="text-center">
-          <div className="text-3xl font-bold text-admin-primary">{totalVotes}</div>
-          <div className="text-sm text-muted-foreground">Total de Votos Registrados</div>
+          <div className="text-5xl font-bold text-admin-primary mb-2">{totalVotes}</div>
+          <div className="text-base text-muted-foreground font-semibold">Total de Votos Registrados</div>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-8">
         {/* Presidente Table */}
-        <div>
-          <h3 className="text-lg font-semibold mb-3 text-presidente">Presidente</h3>
-          <div className="border border-presidente/20 rounded-lg overflow-hidden">
+        <div className="animate-fade-in">
+          <h3 className="text-xl font-semibold mb-4 text-presidente flex items-center gap-2">
+            <div className="w-2 h-8 bg-presidente rounded-full" />
+            Presidente
+          </h3>
+          <div className="border-2 border-presidente/20 rounded-xl overflow-hidden shadow-soft hover:shadow-card transition-smooth">
             <Table>
               <TableHeader>
                 <TableRow className="bg-presidente/10">
